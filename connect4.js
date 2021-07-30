@@ -4,7 +4,6 @@
  * column until a player gets four-in-a-row (horiz, vert, or diag) or until
  * board fills (tie)
  */
-
 const WIDTH = 7;
 const HEIGHT = 6;
 
@@ -30,7 +29,7 @@ function makeBoard() {
 
 function makeHtmlBoard() {
   // TODO: get "htmlBoard" letiable from the item in HTML w/ID of "board"
-  htmlBoard = document.getElementById('board')
+  htmlBoard = document.getElementById("board");
 
   // TODO: add comment for this code
   let top = document.createElement("tr");
@@ -60,13 +59,13 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   let y = HEIGHT - 1;
-  while ((board[y])[x] != null) {
+  while (board[y][x] != null) {
     if (y === 0) {
       return null;
     }
     y--;
   }
-  (board[y])[x] = currPlayer
+  board[y][x] = currPlayer;
   return y;
 }
 
@@ -74,8 +73,8 @@ function findSpotForCol(x) {
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
-  const newDiv = document.createElement("div")
-  newDiv.classList.add(`piece${currPlayer}`)
+  const newDiv = document.createElement("div");
+  newDiv.classList.add(`piece${currPlayer}`);
   const tableGo = document.getElementById(`${y}-${x}`);
   tableGo.append(newDiv);
 }
@@ -83,7 +82,9 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  alert(msg)
+  //setTimeout(() =>
+  alert(msg);
+  //, 50)
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -97,7 +98,7 @@ function handleClick(evt) {
   if (y === null) {
     return;
   }
-  console.log(x, y)
+  console.log(x, y);
 
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
@@ -109,14 +110,17 @@ function handleClick(evt) {
   }
 
   // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
+  // TODO: check if all cells in board are filled; if so call, call
+  // endGame
+  if (checkForTie()) {
+    return endGame("tie");
+  }
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
   if (currPlayer == 1) {
     currPlayer = 2;
-  }
-  else if (currPlayer == 2) {
+  } else if (currPlayer == 2) {
     currPlayer = 1;
   }
 }
@@ -143,10 +147,30 @@ function checkForWin() {
 
   for (let y = 0; y < HEIGHT; y++) {
     for (let x = 0; x < WIDTH; x++) {
-      let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
-      let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+      let horiz = [
+        [y, x],
+        [y, x + 1],
+        [y, x + 2],
+        [y, x + 3],
+      ];
+      let vert = [
+        [y, x],
+        [y + 1, x],
+        [y + 2, x],
+        [y + 3, x],
+      ];
+      let diagDR = [
+        [y, x],
+        [y + 1, x + 1],
+        [y + 2, x + 2],
+        [y + 3, x + 3],
+      ];
+      let diagDL = [
+        [y, x],
+        [y + 1, x - 1],
+        [y + 2, x - 2],
+        [y + 3, x - 3],
+      ];
 
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
         return true;
@@ -155,13 +179,13 @@ function checkForWin() {
   }
 }
 
-// function checkForTie() {
-//   return board.every(function (element) {
-//     element.every(function (el) {
-//       (el !== null)
-//     })
-//   })
-// }
+function checkForTie() {
+  return board.every(function (element) {
+    return element.every(function (el) {
+      return el !== null;
+    });
+  });
+}
 
 makeBoard();
 makeHtmlBoard();
